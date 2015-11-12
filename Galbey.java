@@ -1,25 +1,15 @@
+import java.util.Date;
 import java.util.Random;
 
 public class Galbey {
-	//2 main threads we will utilize
-	private static Thread move;
-	private static Thread speak;
-	
-	public static void setThreads(Global newGlobal){
-		//make sure they have the right variables
-		move = new Thread(new MovementMaster(newGlobal));
-		speak = new Thread(new VoiceMaster(newGlobal));
-	}
-	
 	//methods
 	public static void act(Global newGlobal){
-		//threads should be ready let's do something with them.
+		//Make and start threads to do the dew
+		Thread move = new Thread(new MovementMaster(newGlobal));
+		Thread speak = new Thread(new VoiceMaster(newGlobal));
 		
-		if(!move.isAlive())
-			move.start();
-		
-		if(!speak.isAlive())
-			speak.start();
+		move.start();
+		speak.start();
 	}
 
 	
@@ -30,7 +20,6 @@ public class Galbey {
 		wordProc.setGlobal(masterGlobal);
 		Random rand = new Random();
 		boolean loop = true;
-		setThreads(masterGlobal);
 		
 		//start the word processing which connects to the channel.
 		Thread read = new Thread(wordProc);
@@ -39,13 +28,13 @@ public class Galbey {
 		//main loop
 		while(loop){
 			try {
-				Thread.sleep(1000 * (60 + rand.nextInt(60))); //wait 1-2 mins
-				System.out.println(masterGlobal.toString()); //show me how global is looking
+				Thread.sleep(1000 * (3 + rand.nextInt(1))); //wait 
+				System.out.println(new Date().toString() + " - " + masterGlobal.toString()); //show me how global is looking
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 			
-			act(masterGlobal); //do something
+			//act(masterGlobal); //do something
 		}
 	}
 }
