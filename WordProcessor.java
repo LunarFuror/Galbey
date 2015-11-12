@@ -11,6 +11,11 @@ import org.pircbotx.hooks.types.GenericMessageEvent;
 @SuppressWarnings("rawtypes")
 public class WordProcessor extends ListenerAdapter implements Runnable{
 		static PircBotX bot;
+		Global thisGlobal;
+		
+		public void setGlobal(Global newGlobal){
+			thisGlobal = newGlobal;
+		}
         
         //lets us know when we've connected to server
         public void onConnect(ConnectEvent event){
@@ -28,29 +33,35 @@ public class WordProcessor extends ListenerAdapter implements Runnable{
                 //When someone says ?helloworld respond with "Hello World"
         	if (event.getMessage().toLowerCase().contains("!galbey")){
             	event.respond("Yes boss?");
-            	event.respond(event.toString());
             }
         	
         	if (event.getMessage().toLowerCase().contains("@lunargalbey")){
             	event.respond("I was built to read, not to lead.");
             }
         	
-            if (event.getMessage().toLowerCase().contains("#anger")){
+            if (event.getMessage().toLowerCase().contains("#joy")){
+            	event.respond("#joy noticed");
+            	thisGlobal.incrimentJoy();  
             }
             	
-            if (event.getMessage().toLowerCase().contains("#happy")){
+            if (event.getMessage().toLowerCase().contains("#sadness")){
+            	thisGlobal.incrimentSadness();
             }
             
-            if (event.getMessage().toLowerCase().contains("#sad")){
+            if (event.getMessage().toLowerCase().contains("#anger")){
+            	thisGlobal.incrimentAnger();
             }
             
-            if (event.getMessage().toLowerCase().contains("#scared")){
+            if (event.getMessage().toLowerCase().contains("#humor")){
+            	thisGlobal.incrimentHumor();
             }
             
-			if (event.getMessage().toLowerCase().contains("#excited")){
+			if (event.getMessage().toLowerCase().contains("#dissapointment")){
+				thisGlobal.incrimentDissapointment();
             }
 			
-			if (event.getMessage().toLowerCase().contains("#confused")){
+			if (event.getMessage().toLowerCase().contains("#scared")){
+				thisGlobal.incrimentScared();
 			}
         }
 
@@ -63,6 +74,7 @@ public class WordProcessor extends ListenerAdapter implements Runnable{
 		
                 .setName("lunargalbey") //Set the nick of the bot. CHANGE IN YOUR CODE
                 .setServerHostname("irc.twitch.tv") //Join the freenode network
+                .setServerPort(6667)
                 .setServerPassword("oauth:4oro508xzuhnzg8nrmmpchx33m4mbf")
                 .addAutoJoinChannel("#lunargalbey") //Join the official #pircbotx channel
                 
