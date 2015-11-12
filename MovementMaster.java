@@ -7,6 +7,5 @@ public class MovementMaster implements Runnable {
 	}
 	
 	public void run() {
-		thisGlobal.incrimentJoy();
 	}
 }
