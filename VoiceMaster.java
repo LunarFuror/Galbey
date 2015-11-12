@@ -7,6 +7,5 @@ public class VoiceMaster implements Runnable {
 	}
 	
 	public void run() {
-		thisGlobal.incrimentHumor();
 	}
 }
