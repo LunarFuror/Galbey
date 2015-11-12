@@ -1,7 +1,11 @@
 # Galbey
-Initial
 
-go here
+At current state it will connect to the server, and join a channel... most of the time.
+It will read and recognize commands and can respond to them accordingly.
+However it seems to be having trouble incrimenting emotions correctly from wordprocessor,
+Voice and Movement masters can incriment just fine in their run methods.
+
+Go here
 https://github.com/TheLQ/pircbotx/wiki/Downloads
 Follow the instructions to get your Eclipse or w/e you're using set up.
 
