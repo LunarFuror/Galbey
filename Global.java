@@ -20,21 +20,27 @@ public class Global {
 
 	public synchronized void incrimentJoy(){
 		joy ++;
+		System.out.println("joy incrimented");
 	}
 	public synchronized void incrimentSadness(){
 		sadness ++;
+		System.out.println("saddness incrimented");
 	}
 	public synchronized void incrimentAnger(){
 		anger ++;
+		System.out.println("anger incrimented");
 	}
 	public synchronized void incrimentHumor(){
 		humor ++;
+		System.out.println("Humor incrimented");
 	}
 	public synchronized void incrimentDissapointment(){
 		dissapointment ++;
+		System.out.println("dissapointment incrimented");
 	}
 	public synchronized void incrimentScared(){
 		scared ++;
+		System.out.println("scared incrimented");
 	}
 	
 	//getters and setters
