@@ -12,7 +12,8 @@ import org.pircbotx.hooks.types.GenericMessageEvent;
 public class WordProcessor extends ListenerAdapter implements Runnable {
 	static PircBotX bot;
 	Global thisGlobal;
-
+	
+	//CONSTRUCTORS GO HERE
 	public WordProcessor(){
 		super();
 	}
@@ -22,7 +23,32 @@ public class WordProcessor extends ListenerAdapter implements Runnable {
 		thisGlobal = newGlobal;
 	}
 
-	// lets us know when we've connected to server
+	//NORMAL METHODS
+	public void joyUp(){
+		thisGlobal.incrimentJoy();
+	}
+	
+	public void angerUp(){
+		thisGlobal.incrimentAnger();
+	}
+	
+	public void sadUp(){
+		thisGlobal.incrimentSadness();
+	}
+	
+	public void humorUp(){
+		thisGlobal.incrimentHumor();
+	}
+	
+	public void dissapointmentUp(){
+		thisGlobal.incrimentDissapointment();
+	}
+	
+	public void scaredUp(){
+		thisGlobal.incrimentScared();
+	}
+	
+	//LISTENER OVERRIDE METHODS
 	public void onConnect(ConnectEvent event) {
 		System.out.println("Connected!");
 	}
@@ -45,29 +71,27 @@ public class WordProcessor extends ListenerAdapter implements Runnable {
 		}
 
 		if (event.getMessage().toLowerCase().contains("#joy")) {
-			event.respond("#joy noticed");
-			thisGlobal.incrimentJoy();
-			System.out.println("Tried to increment");
+			joyUp();
 		}
 
 		if (event.getMessage().toLowerCase().contains("#sadness")) {
-			thisGlobal.incrimentSadness();
+			sadUp();
 		}
 
 		if (event.getMessage().toLowerCase().contains("#anger")) {
-			thisGlobal.incrimentAnger();
+			angerUp();
 		}
 
 		if (event.getMessage().toLowerCase().contains("#humor")) {
-			thisGlobal.incrimentHumor();
+			humorUp();
 		}
 
 		if (event.getMessage().toLowerCase().contains("#dissapointment")) {
-			thisGlobal.incrimentDissapointment();
+			dissapointmentUp();
 		}
 
 		if (event.getMessage().toLowerCase().contains("#scared")) {
-			thisGlobal.incrimentScared();
+			scaredUp();
 		}
 	}
 
