@@ -1,98 +1,101 @@
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class Global {
 	//variables
-	private int joy;
-	private int sadness;
-	private int anger; 
-	private int humor;
-	private int dissapointment;
-	private int scared;
+	private AtomicInteger joy;
+	private AtomicInteger sadness;
+	private AtomicInteger anger; 
+	private AtomicInteger humor;
+	private AtomicInteger dissapointment;
+	private AtomicInteger scared;
 	
 	public Global(){
-		joy = 0;
-		sadness = 0;
-		anger = 0;
-		humor = 0;
-		dissapointment = 0;
-		scared = 0;
+		joy = new AtomicInteger(0);
+		sadness = new AtomicInteger(0);
+		anger = new AtomicInteger(0);
+		humor = new AtomicInteger(0);
+		dissapointment = new AtomicInteger(0);
+		scared = new AtomicInteger(0);
 	}
 	
 	//methods
 
-	public synchronized void incrimentJoy(){
-		joy ++;
+	public void incrimentJoy(){
+		joy.incrementAndGet();
 		System.out.println("joy incrimented");
 	}
-	public synchronized void incrimentSadness(){
-		sadness ++;
+	public void incrimentSadness(){
+		sadness.incrementAndGet();
 		System.out.println("saddness incrimented");
 	}
-	public synchronized void incrimentAnger(){
-		anger ++;
+	public void incrimentAnger(){
+		anger.incrementAndGet();
 		System.out.println("anger incrimented");
 	}
-	public synchronized void incrimentHumor(){
-		humor ++;
+	public void incrimentHumor(){
+		humor.incrementAndGet();
 		System.out.println("Humor incrimented");
 	}
-	public synchronized void incrimentDissapointment(){
-		dissapointment ++;
+	public void incrimentDissapointment(){
+		dissapointment.incrementAndGet();
 		System.out.println("dissapointment incrimented");
 	}
-	public synchronized void incrimentScared(){
-		scared ++;
+	public void incrimentScared(){
+		scared.incrementAndGet();
 		System.out.println("scared incrimented");
 	}
 	
 	//getters and setters
-	public synchronized int getJoy() {
-		return joy;
+	public int getJoy() {
+		return joy.get();
 	}
 
 	public void setJoy(int joy) {
-		this.joy = joy;
+		this.joy.set(joy);
 	}
 
-	public synchronized int getSadness() {
-		return sadness;
+	public int getSadness() {
+		return sadness.get();
 	}
 
 	public void setSadness(int sadness) {
-		this.sadness = sadness;
+		this.sadness.set(sadness);
 	}
 
-	public synchronized int getAnger() {
-		return anger;
+	public int getAnger() {
+		return anger.get();
 	}
 
 	public void setAnger(int anger) {
-		this.anger = anger;
+		this.anger.set(anger);
 	}
 
-	public synchronized int getHumor() {
-		return humor;
+	public int getHumor() {
+		return humor.get();
 	}
 
 	public void setHumor(int humor) {
-		this.humor = humor;
+		this.humor.set(humor);
 	}
 
-	public synchronized int getDissapointment() {
-		return dissapointment;
+	public int getDissapointment() {
+		return dissapointment.get();
 	}
 
 	public void setDissapointment(int dissapointment) {
-		this.dissapointment = dissapointment;
+		this.dissapointment.set(dissapointment);
 	}
 
-	public synchronized int getScared() {
-		return scared;
+	public int getScared() {
+		return scared.get();
 	}
 
 	public void setScared(int scared) {
-		this.scared = scared;
+		this.scared.set(scared);
 	}
 
 	public String toString(){
-		return "joy:" + joy + " sadness:" + sadness + " anger:" + anger + " humor:" + humor + " dissapointment:" + dissapointment + " scared:" + scared;
+		return "joy:" + joy.get() + " sadness:" + sadness.get() + " anger:" + anger.get() + " humor:" + humor.get() +
+				" dissapointment:" + dissapointment.get() + " scared:" + scared.get();
 	}
 }
