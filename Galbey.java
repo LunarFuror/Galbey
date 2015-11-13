@@ -16,13 +16,11 @@ public class Galbey {
 	public static void main(String[] args){
 		//initialize stuff
 		Global masterGlobal = new Global();
-		WordProcessor wordProc = new WordProcessor();
-		wordProc.setGlobal(masterGlobal);
 		Random rand = new Random();
 		boolean loop = true;
 		
 		//start the word processing which connects to the channel.
-		Thread read = new Thread(wordProc);
+		Thread read = new Thread(new WordProcessor(masterGlobal));
 		read.start();
 		
 		//main loop
@@ -34,7 +32,7 @@ public class Galbey {
 				e.printStackTrace();
 			}
 			
-			//act(masterGlobal); //do something
+			act(masterGlobal); //do something
 		}
 	}
 }
