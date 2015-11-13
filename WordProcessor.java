@@ -13,7 +13,12 @@ public class WordProcessor extends ListenerAdapter implements Runnable {
 	static PircBotX bot;
 	Global thisGlobal;
 
-	public void setGlobal(Global newGlobal) {
+	public WordProcessor(){
+		super();
+	}
+	
+	public WordProcessor(Global newGlobal){
+		super();
 		thisGlobal = newGlobal;
 	}
 
@@ -29,7 +34,7 @@ public class WordProcessor extends ListenerAdapter implements Runnable {
 	}
 
 	// parse messages for commands and emotions
-	public void onGenericMessage(GenericMessageEvent event) {
+	public void onGenericMessage(GenericMessageEvent event) throws InterruptedException {
 		// When someone says ?helloworld respond with "Hello World"
 		if (event.getMessage().toLowerCase().contains("!galbey")) {
 			event.respond("Yes boss?");
@@ -42,6 +47,7 @@ public class WordProcessor extends ListenerAdapter implements Runnable {
 		if (event.getMessage().toLowerCase().contains("#joy")) {
 			event.respond("#joy noticed");
 			thisGlobal.incrimentJoy();
+			System.out.println("Tried to increment");
 		}
 
 		if (event.getMessage().toLowerCase().contains("#sadness")) {
@@ -70,12 +76,12 @@ public class WordProcessor extends ListenerAdapter implements Runnable {
 		@SuppressWarnings("unchecked")
 		Configuration<PircBotX> configuration = new Configuration.Builder<PircBotX>().setAutoNickChange(false)
 			.addCapHandler(new EnableCapHandler("twitch.tv/membership"))
-
+	
 			.setName("lunargalbey") // Set the nick of the bot. CHANGE IN YOUR CODE
-			.setServerHostname("irc.twitch.tv") // Join the twitch network
-			.setServerPort(6667).setServerPassword("oauth:4oro508xzuhnzg8nrmmpchx33m4mbf")
-			.addAutoJoinChannel("#lunargalbey") // Join the channel
-
+			.setServerHostname("irc.twitch.tv") // Join the freenode network
+			.setServerPort(6667).setServerPassword("oauth:sapooyzgzir30i31mzd8u9xdvbgt97")
+			.addAutoJoinChannel("#lunargalbey") // Join the official pircbotx channel
+	
 			.addListener(new WordProcessor()) // Add our listener that will be called on Events
 			.buildConfiguration();
 
