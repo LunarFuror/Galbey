@@ -25,7 +25,10 @@ public class WordProcessor extends ListenerAdapter implements Runnable {
 
 	//NORMAL METHODS
 	public void joyUp(){
-		thisGlobal.incrimentJoy();
+		try{
+			thisGlobal.incrimentJoy();
+		}
+		catch(Exception e){ e.printStackTrace(System.out);	}
 	}
 	
 	public void angerUp(){
@@ -71,6 +74,7 @@ public class WordProcessor extends ListenerAdapter implements Runnable {
 		}
 
 		if (event.getMessage().toLowerCase().contains("#joy")) {
+			System.out.println("joy");
 			joyUp();
 		}
 
@@ -106,7 +110,7 @@ public class WordProcessor extends ListenerAdapter implements Runnable {
 			.setServerPort(6667).setServerPassword("oauth:sapooyzgzir30i31mzd8u9xdvbgt97")
 			.addAutoJoinChannel("#lunargalbey") // Join the official pircbotx channel
 	
-			.addListener(new WordProcessor()) // Add our listener that will be called on Events
+			.addListener(new WordProcessor(thisGlobal)) // Add our listener that will be called on Events
 			.buildConfiguration();
 
 		// Create our bot with the configuration
