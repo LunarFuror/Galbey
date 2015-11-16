@@ -24,33 +24,7 @@ public class WordProcessor extends ListenerAdapter implements Runnable {
 	}
 
 	//NORMAL METHODS
-	public void joyUp(){
-		try{
-			thisGlobal.incrimentJoy();
-		}
-		catch(Exception e){ e.printStackTrace(System.out);	}
-	}
-	
-	public void angerUp(){
-		thisGlobal.incrimentAnger();
-	}
-	
-	public void sadUp(){
-		thisGlobal.incrimentSadness();
-	}
-	
-	public void humorUp(){
-		thisGlobal.incrimentHumor();
-	}
-	
-	public void dissapointmentUp(){
-		thisGlobal.incrimentDissapointment();
-	}
-	
-	public void scaredUp(){
-		thisGlobal.incrimentScared();
-	}
-	
+
 	//LISTENER OVERRIDE METHODS
 	public void onConnect(ConnectEvent event) {
 		System.out.println("Connected!");
@@ -75,27 +49,27 @@ public class WordProcessor extends ListenerAdapter implements Runnable {
 
 		if (event.getMessage().toLowerCase().contains("#joy")) {
 			System.out.println("joy");
-			joyUp();
+			thisGlobal.incrimentJoy();
 		}
 
 		if (event.getMessage().toLowerCase().contains("#sadness")) {
-			sadUp();
+			thisGlobal.incrimentSadness();
 		}
 
 		if (event.getMessage().toLowerCase().contains("#anger")) {
-			angerUp();
+			thisGlobal.incrimentAnger();
 		}
 
 		if (event.getMessage().toLowerCase().contains("#humor")) {
-			humorUp();
+			thisGlobal.incrimentHumor();
 		}
 
 		if (event.getMessage().toLowerCase().contains("#dissapointment")) {
-			dissapointmentUp();
+			thisGlobal.incrimentDissapointment();
 		}
 
 		if (event.getMessage().toLowerCase().contains("#scared")) {
-			scaredUp();
+			thisGlobal.incrimentScared();
 		}
 	}
 
