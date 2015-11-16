@@ -8,6 +8,7 @@ public class Global {
 	private AtomicInteger humor;
 	private AtomicInteger dissapointment;
 	private AtomicInteger scared;
+	private AtomicInteger feelsCode;
 	
 	public Global(){
 		joy = new AtomicInteger(0);
@@ -16,6 +17,7 @@ public class Global {
 		humor = new AtomicInteger(0);
 		dissapointment = new AtomicInteger(0);
 		scared = new AtomicInteger(0);
+		feelsCode = new AtomicInteger(0);
 	}
 	
 	//methods
@@ -24,25 +26,44 @@ public class Global {
 		joy.incrementAndGet();
 		System.out.println("joy incrimented");
 	}
+	
 	public void incrimentSadness(){
 		sadness.incrementAndGet();
 		System.out.println("saddness incrimented");
 	}
+	
 	public void incrimentAnger(){
 		anger.incrementAndGet();
 		System.out.println("anger incrimented");
 	}
+	
 	public void incrimentHumor(){
 		humor.incrementAndGet();
 		System.out.println("Humor incrimented");
 	}
+	
 	public void incrimentDissapointment(){
 		dissapointment.incrementAndGet();
 		System.out.println("dissapointment incrimented");
 	}
+	
 	public void incrimentScared(){
 		scared.incrementAndGet();
 		System.out.println("scared incrimented");
+	}
+	
+	public void resetFeels(){
+		joy.set(0);
+		sadness.set(0);
+		anger.set(0);
+		humor.set(0);
+		dissapointment.set(0);
+		scared.set(0);
+		feelsCode.set(0);
+	}
+	
+	public void generateAction(){
+		
 	}
 	
 	//getters and setters
@@ -92,6 +113,14 @@ public class Global {
 
 	public void setScared(int scared) {
 		this.scared.set(scared);
+	}
+	
+	public int getFeelCode(){
+		return scared.get();
+	}
+	
+	public void setFeelCode(int feelCode){
+		this.feelsCode.set(feelCode);
 	}
 
 	public String toString(){
