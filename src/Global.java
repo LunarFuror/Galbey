@@ -1,3 +1,4 @@
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Global {
@@ -8,16 +9,20 @@ public class Global {
 	private AtomicInteger humor;
 	private AtomicInteger dissapointment;
 	private AtomicInteger scared;
-	private AtomicInteger feelsCode;
+	private AtomicInteger[] feelsCode;
+	private String channel;
+	Random rand;
 	
 	public Global(){
+		rand = new Random();
 		joy = new AtomicInteger(0);
 		sadness = new AtomicInteger(0);
 		anger = new AtomicInteger(0);
 		humor = new AtomicInteger(0);
 		dissapointment = new AtomicInteger(0);
 		scared = new AtomicInteger(0);
-		feelsCode = new AtomicInteger(0);
+		feelsCode = new AtomicInteger[2];
+		channel = "#lunarfuror";
 	}
 	
 	//methods
@@ -59,11 +64,21 @@ public class Global {
 		humor.set(0);
 		dissapointment.set(0);
 		scared.set(0);
-		feelsCode.set(0);
+		feelsCode[0].set(0);
+		feelsCode[1].set(0);
 	}
 	
 	public void generateAction(){
-		
+		int feel = 0;
+		int max = 0;
+		if(joy.get() > max){feel = 1; max = joy.get();}
+		if(sadness.get() > max){feel = 2; max = sadness.get();}
+		if(anger.get() > max){feel = 3; max = anger.get();}
+		if(humor.get() > max){feel = 4; max = humor.get();}
+		if(dissapointment.get() > max){feel = 5; max = dissapointment.get();}
+		if(scared.get() > max){feel = 6; max = scared.get();}
+		feelsCode[0].set(feel);
+		feelsCode[1].set(rand.nextInt(2)+1);
 	}
 	
 	//getters and setters
@@ -115,12 +130,22 @@ public class Global {
 		this.scared.set(scared);
 	}
 	
-	public int getFeelCode(){
-		return scared.get();
+	public int[] getFeelCode(){
+		int[] output = {feelsCode[0].get(), feelsCode[1].get()};
+		return output;
 	}
 	
-	public void setFeelCode(int feelCode){
-		this.feelsCode.set(feelCode);
+	public void setFeelCode(int[] feelCode){
+		this.feelsCode[0].set(feelCode[0]);
+		this.feelsCode[1].set(feelCode[1]);
+	}
+
+	public String getChannel() {
+		return channel;
+	}
+
+	public void setChannel(String channel) {
+		this.channel = channel;
 	}
 
 	public String toString(){
