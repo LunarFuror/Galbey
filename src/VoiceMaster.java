@@ -1,4 +1,3 @@
-
 public class VoiceMaster implements Runnable {
 	Global thisGlobal;
 

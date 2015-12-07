@@ -9,7 +9,7 @@ public class Global {
 	private AtomicInteger humor;
 	private AtomicInteger dissapointment;
 	private AtomicInteger scared;
-	private AtomicInteger[] feelsCode;
+	private int[] feelsCode;
 	private String channel;
 	Random rand;
 	
@@ -21,8 +21,9 @@ public class Global {
 		humor = new AtomicInteger(0);
 		dissapointment = new AtomicInteger(0);
 		scared = new AtomicInteger(0);
-		feelsCode = new AtomicInteger[2];
-		channel = "#lunarfuror";
+		feelsCode = new int[2];
+		//change me for specific people
+		channel = "#lunargalbey";
 	}
 	
 	//methods
@@ -57,18 +58,19 @@ public class Global {
 		System.out.println("scared incrimented");
 	}
 	
-	public void resetFeels(){
+	public synchronized void resetFeels(){
 		joy.set(0);
 		sadness.set(0);
 		anger.set(0);
 		humor.set(0);
 		dissapointment.set(0);
 		scared.set(0);
-		feelsCode[0].set(0);
-		feelsCode[1].set(0);
+		feelsCode[0] = 0;
+		feelsCode[1] = 0;
 	}
 	
-	public void generateAction(){
+	public synchronized void generateAction(){
+		System.out.println("feels start");
 		int feel = 0;
 		int max = 0;
 		if(joy.get() > max){feel = 1; max = joy.get();}
@@ -77,8 +79,11 @@ public class Global {
 		if(humor.get() > max){feel = 4; max = humor.get();}
 		if(dissapointment.get() > max){feel = 5; max = dissapointment.get();}
 		if(scared.get() > max){feel = 6; max = scared.get();}
-		feelsCode[0].set(feel);
-		feelsCode[1].set(rand.nextInt(2)+1);
+		System.out.println("found max: " + feel + " max val:" + max);
+		feelsCode[0] = (feel);
+		//CHANGE ME AS YOU ADD STUUUUFF
+		feelsCode[1] = (rand.nextInt(3)+1);
+		System.out.println("feels set");
 	}
 	
 	//getters and setters
@@ -131,13 +136,12 @@ public class Global {
 	}
 	
 	public int[] getFeelCode(){
-		int[] output = {feelsCode[0].get(), feelsCode[1].get()};
-		return output;
+		return feelsCode;
 	}
 	
 	public void setFeelCode(int[] feelCode){
-		this.feelsCode[0].set(feelCode[0]);
-		this.feelsCode[1].set(feelCode[1]);
+		this.feelsCode[0] = (feelCode[0]);
+		this.feelsCode[1] = (feelCode[1]);
 	}
 
 	public String getChannel() {

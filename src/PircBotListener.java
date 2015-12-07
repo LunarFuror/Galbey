@@ -55,120 +55,144 @@ public class PircBotListener extends ListenerAdapter {
 			lastMessageResponded = LocalTime.now();
 		}
 		else if (message.startsWith("TimedResponse")){
+			System.out.println("timed response recieved");
 			thisGlobal.generateAction();
 			int[] feelCode = thisGlobal.getFeelCode();
-
+			System.out.println("feels set confirm");
 			//voice thread here they can get their own code or be sent the code
 			//move thread here they can get their own code or be sent the code
-			event.getBot().sendIRC().message(thisGlobal.getChannel(), decodeFeels(feelCode));
+			String say = "nothing";
+			say=decodeFeels(feelCode);
+			System.out.println("say generated");
+			if(!say.equals("SAY NOTHING")){
+				event.getBot().sendIRC().message(thisGlobal.getChannel(), say);
+			}
+			thisGlobal.resetFeels();
 		}
 		
 	// When someone says ?helloworld respond with "Hello World"
 		if (event.getMessage().toLowerCase().contains("!galbey")) {
 			event.respond("Yes boss?");
 		}
+		
+		if (event.getMessage().toLowerCase().equals("brb")) {
+			event.respond("Come back soon!");
+		}
+		
+		if (event.getMessage().toLowerCase().equals("back")) {
+			event.respond("Welcome back :D");
+		}
+		
+		if(event.getMessage().toLowerCase().contains("?how")){
+			event.getBot().sendIRC().message(thisGlobal.getChannel(), "Use #joy, #sad, #anger, #funny, #dissapoint, and #scarey to influence what I say!"
+				+ "If I hear nothing I wont say anything though :(");
+		}
 
 		if (event.getMessage().toLowerCase().contains("@lunargalbey")) {
 			event.respond("I was built to read, not to lead.");
 		}
 
-		if (event.getMessage().toLowerCase().contains("#joy")) {
+		if (event.getMessage().toLowerCase().contains("#joy") || event.getMessage().toLowerCase().contains("#happy")) {
 			System.out.println("joy");
 			thisGlobal.incrimentJoy();
 		}
 
-		if (event.getMessage().toLowerCase().contains("#sadness")) {
+		if (event.getMessage().toLowerCase().contains("#sadness") || event.getMessage().toLowerCase().contains("#sad")) {
 			thisGlobal.incrimentSadness();
 		}
 
-		if (event.getMessage().toLowerCase().contains("#anger")) {
+		if (event.getMessage().toLowerCase().contains("#anger") || event.getMessage().toLowerCase().contains("#angry")) {
 			thisGlobal.incrimentAnger();
 		}
 
-		if (event.getMessage().toLowerCase().contains("#humor")) {
+		if (event.getMessage().toLowerCase().contains("#humor") || event.getMessage().toLowerCase().contains("#funny")) {
 			thisGlobal.incrimentHumor();
 		}
 
-		if (event.getMessage().toLowerCase().contains("#dissapointment")) {
+		if (event.getMessage().toLowerCase().contains("#dissapointment") || event.getMessage().toLowerCase().contains("#dissapoint")) {
 			thisGlobal.incrimentDissapointment();
 		}
 
-		if (event.getMessage().toLowerCase().contains("#scared")) {
+		if (event.getMessage().toLowerCase().contains("#scared") || event.getMessage().toLowerCase().contains("#scarey")) {
 			thisGlobal.incrimentScared();
 		}
 	}
 	
 	public String decodeFeels(int[] feels){
+		System.out.println("feel:" + feels[0] + " message:" + feels[1]);
 		String output = "";
 		if (feels != null){
 			switch(feels[0]){
 				case 1: 
 					switch(feels[1]){
-						case 1: output = "Joy 1";
+						case 1: output = "I'm liking this! ArgieB8";
 							break;
-						case 2: output = "Joy 2";
+						case 2: output = "I feel... happy! :)";
 							break;
-						case 3: output = "Joy 3";
+						case 3: output = "/me cheers";
 							break;
 					}
 					break;
 				
 				case 2: 
 					switch(feels[1]){
-						case 1: output = "Sad 1";
+						case 1: output = "Oh no... BibleThump";
 							break;
-						case 2: output = "Sad 2";
+						case 2: output = "I feel... sad... :(";
 							break;
-						case 3: output = "Sad 3";
+						case 3: output = "/me crys sofly";
 							break;
 					}
 					break;
 				
 				case 3: 
 					switch(feels[1]){
-						case 1: output = "Mad 1";
+						case 1: output = "WTF?! SwiftRage";
 							break;
-						case 2: output = "Mad 2";
+						case 2: output = "I feel... ANGRY! >(";
 							break;
-						case 3: output = "Mad 3";
+						case 3: output = "/me rages for a while";
 							break;
 					}
 					break;
 				
 				case 4: 
 					switch(feels[1]){
-						case 1: output = "Funny 1";
+						case 1: output = "LOL 4Head";
 							break;
-						case 2: output = "Funny 2";
+						case 2: output = "I feel... like laughing! :D";
 							break;
-						case 3: output = "Funny 3";
+						case 3: output = "/me laughs way to hard";
 							break;
 					}
 					break;
 				
 				case 5: 
 					switch(feels[1]){
-						case 1: output = "Dissapoint 1";
+						case 1: output = "Seriously? DansGame";
 							break;
-						case 2: output = "Dissapoint 2";
+						case 2: output = "I feel... dissapointed.";
 							break;
-						case 3: output = "Dissapoint 3";
+						case 3: output = "/me just shakes his head";
 							break;
 					}
 					break;
 				
 				case 6: 
 					switch(feels[1]){
-						case 1: output = "Scared 1";
+						case 1: output = "Run! babyRage";
 							break;
-						case 2: output = "Scared 2";
+						case 2: output = "I feel... scawed...";
 							break;
-						case 3: output = "Scared 3";
+						case 3: output = "/me hides";
 							break;
 					}
 					break;
+				default: output = "SAY NOTHING";
+					break;
 			}
 		}
+		System.out.println(output);
 		return output;
 	}
 }

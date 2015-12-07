@@ -1,4 +1,3 @@
-
 public class MovementMaster implements Runnable {
 	Global thisGlobal;
 	

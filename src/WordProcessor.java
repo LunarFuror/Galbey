@@ -55,7 +55,7 @@ public class WordProcessor{
 		{
 			if (theBot.isConnected())
 			{
-				System.out.println("Here I am with a time check");
+				//System.out.println("Here I am with a time check");
 				if (theListener.getLastMessageRespondedTime().plusSeconds(30).isBefore(LocalTime.now()))
 				{
 					man.dispatchEvent(new TimeEvent(theBot, theBot.getUserBot().getChannels().first()));
@@ -67,9 +67,11 @@ public class WordProcessor{
 					if(seconds == 30){seconds = 0;}
 					timeCheck = LocalTime.now();
 				}
-				if (timedResponse.plusSeconds(10).isBefore(LocalTime.now()))
+				if (timedResponse.plusSeconds(30).isBefore(LocalTime.now()))
 				{
+					System.out.println("Dispach response");
 					man.dispatchEvent(new TimeEvent(theBot, theBot.getUserBot().getChannels().first(),"TimedResponse"));
+					timedResponse = LocalTime.now();
 				}
 			}
 			Thread.sleep(100);
