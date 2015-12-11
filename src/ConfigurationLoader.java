@@ -9,6 +9,8 @@ import org.pircbotx.PircBotX;
 public class ConfigurationLoader {
 	
 	private boolean loaded = false;
+	
+	private boolean fileOk = false;
 
 	private String fileName;
 	
@@ -24,17 +26,25 @@ public class ConfigurationLoader {
 	
 	public ConfigurationLoader()
 	{
-		fileName = "galbey.properties";
+		SetFilename("galbey.properties");
+		loaded = false;
+		fileOk = false;
 	}
 	
 	public ConfigurationLoader(String fn)
 	{
-		fileName = fn;
+		SetFilename(fileName = fn);
 		loaded = false;
+		fileOk = false;
 	}
 	
 	public void LoadConfiguration() throws IOException
 	{
+		if (!fileOk)
+		{
+			loaded = false;
+			throw new IOException("Filename is invalid or cannot be opened");
+		}
 		loaded = false;
 		InputStream inputStream = null;
 		try {
@@ -48,14 +58,25 @@ public class ConfigurationLoader {
 				throw new FileNotFoundException("property file '" + fileName + "' not found in the classpath");
 			}
  
-			// get the property value and print it out
-			name = prop.getProperty("name");
-			password = prop.getProperty("password");
-			channels = prop.getProperty("channels");
-			hostname = prop.getProperty("hostname");
-			if (tryParseInt(prop.getProperty("port")))
+			if (prop.contains("name"))
 			{
-				port = Integer.parseInt(prop.getProperty("port"));
+				SetName(prop.getProperty("name");
+			}
+			if (prop.contains("password"))
+			{
+				SetPassword(prop.getProperty("password");
+			}
+			if (prop.contains("channels"))
+			{
+				SetChannels(prop.getProperty("channels");
+			}
+			if (prop.contains("hostname"))
+			{
+				SetHostname(prop.getProperty("hostname");
+			}
+			if (prop.contains("port") && TryParseInt(prop.getProperty("port")))
+			{
+				SetPort(Integer.parseInt(prop.getProperty("port")));
 			}
 			
 			String result = "Name: " + name + "\nPassword: " + password + "\nChannels: " + channels + "\nHostName: " + hostname + "\nPort: " + port;
@@ -74,18 +95,91 @@ public class ConfigurationLoader {
 		LoadConfiguration();
 	}
 	
-	public Configuration<PircBotX> GetConfiguration()
+	public Configuration.Builder<PircBotX> GetConfiguration()
 	{
-		return null;
+		return new Configuration.Builder<PircBotX>()
+			.setName(name)
+			.setServerPassword(password)
+			.addAutoJoinChannel(channels)
+			.setServerHostname(hostname)
+			.setServerPort(port);
 	}
 	
-	private boolean tryParseInt(String value) {  
+	private boolean TryParseInt(String value) {  
 	     try {  
 	         Integer.parseInt(value);  
 	         return true;  
 	      } catch (NumberFormatException e) {  
 	         return false;  
 	      }  
+	}
+	
+	public void SetFilename(String fn)
+	{
+		File tempFile = new File(fn);
+		if (tempFile.exists() && !tempFile.isDirectory())
+		{
+			fileOk = true;
+		}
+		else
+		{
+			fileOk = false;
+		}
+	}
+	
+	public String GetFileName()
+	{
+		return fileName;
+	}
+	
+	public void SetName(String n)
+	{
+		name = n;
+	}
+	
+	public String GetName
+	{
+		return name;
+	}
+	
+	public void String SetPassword(String p)
+	{
+		password = p;
+	}
+	
+	public String GetPassword
+	{
+		return password;
+	}
+	
+	public void SetChannels(String c)
+	{
+		channels = c;
+	}
+	
+	public String GetChannels
+	{
+		return channels;
+	}
+	
+	public void SetHostname(String h)
+	{
+		hostname = h;
+	}
+	
+	public String GetHostname
+	{
+		return hostname;
+	}
+	
+	public void SetPort(int p)
+	{
+		port = p;
+	}
+	
+	public int GetPort
+	{
+		return port;
 	}
 	
 	public static void main(String[] args) {

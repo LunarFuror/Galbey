@@ -19,14 +19,10 @@ public class WordProcessor{
 		PircBotListener theListener = new PircBotListener(thisGlobal);
 		man.addListener(theListener);
 		
-		Configuration<PircBotX> config = new Configuration.Builder<PircBotX>()
-			.setName("lunargalbey")
-			.setServerPassword("oauth:sapooyzgzir30i31mzd8u9xdvbgt97")
-			.addAutoJoinChannel(thisGlobal.getChannel())
-			.setServerHostname("irc.twitch.tv")
-			.setServerPort(6667)
-			.setListenerManager(man)
-			.buildConfiguration();
+		ConfigurationLoader confLoad = new ConfigurationLoader();
+		confLoad.LoadConfiguration();
+		Configuration<PircBotX> config = confLoad.GetConfiguration().setListenerManager(man).buildConfiguration();
+		
 		
 		MultiBotManager<PircBotX> manager = new MultiBotManager<PircBotX>();
 		PircBotX theBot = new PircBotX(config);
