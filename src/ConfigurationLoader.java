@@ -1,9 +1,12 @@
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Properties;
 
 import org.pircbotx.Configuration;
+import org.pircbotx.Configuration.Builder;
 import org.pircbotx.PircBotX;
 
 public class ConfigurationLoader {
@@ -18,7 +21,7 @@ public class ConfigurationLoader {
 	
 	private String password;
 	
-	private String channels;
+	private String[] channels;
 	
 	private String hostname;
 	
@@ -26,26 +29,27 @@ public class ConfigurationLoader {
 	
 	public ConfigurationLoader()
 	{
-		SetFilename("galbey.properties");
 		loaded = false;
 		fileOk = false;
+		ResetProperties();
+		SetFilename("galbey.properties");
 	}
 	
 	public ConfigurationLoader(String fn)
 	{
-		SetFilename(fileName = fn);
 		loaded = false;
 		fileOk = false;
+		ResetProperties();
+		SetFilename(fileName = fn);
 	}
 	
 	public void LoadConfiguration() throws IOException
 	{
+		loaded = false;
 		if (!fileOk)
 		{
-			loaded = false;
 			throw new IOException("Filename is invalid or cannot be opened");
 		}
-		loaded = false;
 		InputStream inputStream = null;
 		try {
 			Properties prop = new Properties();
@@ -58,29 +62,26 @@ public class ConfigurationLoader {
 				throw new FileNotFoundException("property file '" + fileName + "' not found in the classpath");
 			}
  
-			if (prop.contains("name"))
+			if (prop.containsKey("name"))
 			{
-				SetName(prop.getProperty("name");
+				SetName(prop.getProperty("name"));
 			}
-			if (prop.contains("password"))
+			if (prop.containsKey("password"))
 			{
-				SetPassword(prop.getProperty("password");
+				SetPassword(prop.getProperty("password"));
 			}
-			if (prop.contains("channels"))
+			if (prop.containsKey("channels"))
 			{
-				SetChannels(prop.getProperty("channels");
+				SetChannels(prop.getProperty("channels"));
 			}
-			if (prop.contains("hostname"))
+			if (prop.containsKey("hostname"))
 			{
-				SetHostname(prop.getProperty("hostname");
+				SetHostname(prop.getProperty("hostname"));
 			}
-			if (prop.contains("port") && TryParseInt(prop.getProperty("port")))
+			if (prop.containsKey("port") && TryParseInt(prop.getProperty("port")))
 			{
 				SetPort(Integer.parseInt(prop.getProperty("port")));
 			}
-			
-			String result = "Name: " + name + "\nPassword: " + password + "\nChannels: " + channels + "\nHostName: " + hostname + "\nPort: " + port;
-			System.out.println(result);
 		} catch (Exception e) {
 			System.out.println("Exception: " + e);
 		} finally {
@@ -95,14 +96,37 @@ public class ConfigurationLoader {
 		LoadConfiguration();
 	}
 	
-	public Configuration.Builder<PircBotX> GetConfiguration()
+	public Configuration.Builder<PircBotX> GetConfiguration() throws Exception
 	{
-		return new Configuration.Builder<PircBotX>()
-			.setName(name)
-			.setServerPassword(password)
-			.addAutoJoinChannel(channels)
-			.setServerHostname(hostname)
-			.setServerPort(port);
+		if (loaded)
+		{
+			Builder<PircBotX> returnme = new Configuration.Builder<PircBotX>();
+			if (name != null && !name.isEmpty())
+			{
+				returnme.setName(name);
+			}
+			if (password != null && !password.isEmpty())
+			{
+				returnme.setServerPassword(password);
+			}
+			if (channels != null && channels.length > 0)
+			{
+				for(String channel : channels)
+				{
+					returnme.addAutoJoinChannel(channel);
+				}
+			}
+			if (hostname != null && !hostname.isEmpty())
+			{
+				returnme.setServerHostname(hostname);
+			}
+			if (port > 0)
+			{
+				returnme.setServerPort(port);
+			}
+			return returnme;
+		}
+		throw new Exception("Error in loading configuration");
 	}
 	
 	private boolean TryParseInt(String value) {  
@@ -114,16 +138,26 @@ public class ConfigurationLoader {
 	      }  
 	}
 	
+	private void ResetProperties()
+	{
+		name = null;
+		password = null;
+		channels = null;
+		hostname = null;
+		port = 0;
+	}
+	
 	public void SetFilename(String fn)
 	{
-		File tempFile = new File(fn);
-		if (tempFile.exists() && !tempFile.isDirectory())
+		
+		if (getClass().getClassLoader().getResource(fn).getPath().isEmpty())
 		{
-			fileOk = true;
+			fileOk = false;
 		}
 		else
 		{
-			fileOk = false;
+			fileName = fn;
+			fileOk = true;
 		}
 	}
 	
@@ -137,27 +171,37 @@ public class ConfigurationLoader {
 		name = n;
 	}
 	
-	public String GetName
+	public String GetName()
 	{
 		return name;
 	}
 	
-	public void String SetPassword(String p)
+	public void SetPassword(String p)
 	{
 		password = p;
 	}
 	
-	public String GetPassword
+	public String GetPassword()
 	{
 		return password;
 	}
 	
 	public void SetChannels(String c)
 	{
-		channels = c;
+		if (c != null && !c.isEmpty())
+		{
+			if (c.contains(","))
+			{
+				channels = c.split(",");
+			}
+			else
+			{
+				channels = new String[]{c};
+			}
+		}
 	}
 	
-	public String GetChannels
+	public String[] GetChannels()
 	{
 		return channels;
 	}
@@ -167,7 +211,7 @@ public class ConfigurationLoader {
 		hostname = h;
 	}
 	
-	public String GetHostname
+	public String GetHostname()
 	{
 		return hostname;
 	}
@@ -177,7 +221,7 @@ public class ConfigurationLoader {
 		port = p;
 	}
 	
-	public int GetPort
+	public int GetPort()
 	{
 		return port;
 	}
@@ -186,7 +230,12 @@ public class ConfigurationLoader {
 		ConfigurationLoader configLoad = new ConfigurationLoader();
 		try {
 			configLoad.LoadConfiguration();
+			Builder temp = configLoad.GetConfiguration();
+			String test = temp.getName();
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

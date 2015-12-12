@@ -12,7 +12,7 @@ import org.pircbotx.hooks.managers.ThreadedListenerManager;
 public class WordProcessor{
 
 	@SuppressWarnings("unchecked")
-	public static void main(String[] args) throws IOException, IrcException, InterruptedException {
+	public static void main(String[] args) throws IOException, IrcException, InterruptedException, Exception {
 		Global thisGlobal = new Global();
 		final Scanner sc = new Scanner(System.in);
 		ThreadedListenerManager man = new ThreadedListenerManager();
@@ -22,7 +22,6 @@ public class WordProcessor{
 		ConfigurationLoader confLoad = new ConfigurationLoader();
 		confLoad.LoadConfiguration();
 		Configuration<PircBotX> config = confLoad.GetConfiguration().setListenerManager(man).buildConfiguration();
-		
 		
 		MultiBotManager<PircBotX> manager = new MultiBotManager<PircBotX>();
 		PircBotX theBot = new PircBotX(config);
