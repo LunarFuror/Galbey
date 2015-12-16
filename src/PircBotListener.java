@@ -3,6 +3,7 @@ import java.time.LocalTime;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.ConnectEvent;
 import org.pircbotx.hooks.events.JoinEvent;
+import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
 public class PircBotListener extends ListenerAdapter {
@@ -35,26 +36,17 @@ public class PircBotListener extends ListenerAdapter {
 		System.out.println("Connected!");
 	}
 
+	@Override
 	// lets us know when we've entered the channel
 	public void onJoin(JoinEvent event) {
 		System.out.println("Joined!");
-		event.getBot().sendIRC().message(thisGlobal.getChannel(), "Hello!");
+		event.getChannel().send().message("Hello!");
 	}
 	
-	public void onGenericMessage(final GenericMessageEvent event) throws Exception {
-		String message = event.getMessage();
-		
-		if (event.getMessage().toLowerCase().contains("?hello"))
-		{
-			event.getBot().sendIRC().message(thisGlobal.getChannel(), "This was a triumph");
-			lastMessageResponded = LocalTime.now();
-		}
-		else if (message.startsWith("TimerTick"))
-		{
-			event.respond("Lonely I am so lonely please won't someone talk some more?");
-			lastMessageResponded = LocalTime.now();
-		}
-		else if (message.startsWith("TimedResponse")){
+	@Override
+	public void onGenericMessage(final GenericMessageEvent event)throws Exception
+	{
+		if (event.getMessage().startsWith("TimedResponse")){
 			System.out.println("timed response recieved");
 			thisGlobal.generateAction();
 			int[] feelCode = thisGlobal.getFeelCode();
@@ -65,12 +57,16 @@ public class PircBotListener extends ListenerAdapter {
 			say=decodeFeels(feelCode);
 			System.out.println("say generated");
 			if(!say.equals("SAY NOTHING")){
-				event.getBot().sendIRC().message(thisGlobal.getChannel(), say);
+				event.respond(say);
 			}
 			thisGlobal.resetFeels();
 		}
-		
-	// When someone says ?helloworld respond with "Hello World"
+	}
+	
+	
+	@Override
+	public void onMessage(final MessageEvent event) throws Exception {
+		// When someone says ?helloworld respond with "Hello World"
 		if (event.getMessage().toLowerCase().contains("!galbey")) {
 			event.respond("Yes boss?");
 		}
@@ -84,7 +80,7 @@ public class PircBotListener extends ListenerAdapter {
 		}
 		
 		if(event.getMessage().toLowerCase().contains("?how")){
-			event.getBot().sendIRC().message(thisGlobal.getChannel(), "Use #joy, #sad, #anger, #funny, #dissapoint, and #scarey to influence what I say!"
+			event.getBot().sendIRC().message(event.getChannel().getName(), "Use #joy, #sad, #anger, #funny, #dissapoint, and #scarey to influence what I say!"
 				+ "If I hear nothing I wont say anything though :(");
 		}
 

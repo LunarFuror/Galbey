@@ -11,7 +11,7 @@ public class TimeEvent extends Event implements GenericMessageEvent {
 	public TimeEvent(PircBotX bot, Channel theChannel) {
 		super(bot);
 		this.theChannel = theChannel;
-		command = "TimeTick";
+		command = "TimerTick";
 	}
 	
 	public TimeEvent(PircBotX bot, Channel theChannel, String message) {

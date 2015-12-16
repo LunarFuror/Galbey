@@ -50,11 +50,6 @@ public class WordProcessor{
 		{
 			if (theBot.isConnected())
 			{
-				//System.out.println("Here I am with a time check");
-				if (theListener.getLastMessageRespondedTime().plusSeconds(30).isBefore(LocalTime.now()))
-				{
-					man.dispatchEvent(new TimeEvent(theBot, theBot.getUserBot().getChannels().first()));
-				}
 				if (timeCheck.plusSeconds(10).isBefore(LocalTime.now()))
 				{
 					seconds += 10;

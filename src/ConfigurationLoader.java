@@ -1,8 +1,6 @@
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.util.Properties;
 
 import org.pircbotx.Configuration;
@@ -41,6 +39,98 @@ public class ConfigurationLoader {
 		fileOk = false;
 		ResetProperties();
 		SetFilename(fileName = fn);
+	}
+	
+	public void SetFilename(String fn)
+	{
+		
+		if (getClass().getClassLoader().getResource(fn).getPath().isEmpty())
+		{
+			fileOk = false;
+		}
+		else
+		{
+			fileName = fn;
+			fileOk = true;
+		}
+	}
+	
+	public String GetFileName()
+	{
+		return fileName;
+	}
+	
+	public void SetName(String n)
+	{
+		name = n;
+	}
+	
+	public String GetName()
+	{
+		return name;
+	}
+	
+	public void SetPassword(String p)
+	{
+		password = p;
+	}
+	
+	public String GetPassword()
+	{
+		return password;
+	}
+	
+	public void SetChannels(String c)
+	{
+		if (c != null && !c.isEmpty())
+		{
+			if (c.contains(","))
+			{
+				channels = c.split(",");
+				for (int i = 0; i < channels.length; i++)
+				{
+					if (!channels[i].startsWith("#"))
+					{
+						channels[i] = "#" + channels[i];
+					}
+				}
+			}
+			else
+			{
+				channels = new String[]{c};
+			}
+		}
+	}
+	
+	public String[] GetChannels()
+	{
+		return channels;
+	}
+	
+	public void SetHostname(String h)
+	{
+		hostname = h;
+	}
+	
+	public String GetHostname()
+	{
+		return hostname;
+	}
+	
+	public void SetPort(int p)
+	{
+		port = p;
+	}
+	
+	public int GetPort()
+	{
+		return port;
+	}
+	
+	public void LoadConfiguration(String fn) throws IOException
+	{
+		fileName = fn;
+		LoadConfiguration();
 	}
 	
 	public void LoadConfiguration() throws IOException
@@ -90,14 +180,12 @@ public class ConfigurationLoader {
 		loaded = true;
 	}
 	
-	public void LoadConfiguration(String fn) throws IOException
-	{
-		fileName = fn;
-		LoadConfiguration();
-	}
-	
 	public Configuration.Builder<PircBotX> GetConfiguration() throws Exception
 	{
+		if (!loaded)
+		{
+			LoadConfiguration();
+		}
 		if (loaded)
 		{
 			Builder<PircBotX> returnme = new Configuration.Builder<PircBotX>();
@@ -126,7 +214,7 @@ public class ConfigurationLoader {
 			}
 			return returnme;
 		}
-		throw new Exception("Error in loading configuration");
+		throw new Exception("Configuration not Loaded correctly");
 	}
 	
 	private boolean TryParseInt(String value) {  
@@ -146,100 +234,4 @@ public class ConfigurationLoader {
 		hostname = null;
 		port = 0;
 	}
-	
-	public void SetFilename(String fn)
-	{
-		
-		if (getClass().getClassLoader().getResource(fn).getPath().isEmpty())
-		{
-			fileOk = false;
-		}
-		else
-		{
-			fileName = fn;
-			fileOk = true;
-		}
-	}
-	
-	public String GetFileName()
-	{
-		return fileName;
-	}
-	
-	public void SetName(String n)
-	{
-		name = n;
-	}
-	
-	public String GetName()
-	{
-		return name;
-	}
-	
-	public void SetPassword(String p)
-	{
-		password = p;
-	}
-	
-	public String GetPassword()
-	{
-		return password;
-	}
-	
-	public void SetChannels(String c)
-	{
-		if (c != null && !c.isEmpty())
-		{
-			if (c.contains(","))
-			{
-				channels = c.split(",");
-			}
-			else
-			{
-				channels = new String[]{c};
-			}
-		}
-	}
-	
-	public String[] GetChannels()
-	{
-		return channels;
-	}
-	
-	public void SetHostname(String h)
-	{
-		hostname = h;
-	}
-	
-	public String GetHostname()
-	{
-		return hostname;
-	}
-	
-	public void SetPort(int p)
-	{
-		port = p;
-	}
-	
-	public int GetPort()
-	{
-		return port;
-	}
-	
-	public static void main(String[] args) {
-		ConfigurationLoader configLoad = new ConfigurationLoader();
-		try {
-			configLoad.LoadConfiguration();
-			Builder temp = configLoad.GetConfiguration();
-			String test = temp.getName();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
-
 }
