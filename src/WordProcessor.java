@@ -12,21 +12,16 @@ import org.pircbotx.hooks.managers.ThreadedListenerManager;
 public class WordProcessor{
 
 	@SuppressWarnings("unchecked")
-	public static void main(String[] args) throws IOException, IrcException, InterruptedException {
+	public static void main(String[] args) throws IOException, IrcException, InterruptedException, Exception {
 		Global thisGlobal = new Global();
 		final Scanner sc = new Scanner(System.in);
 		ThreadedListenerManager man = new ThreadedListenerManager();
 		PircBotListener theListener = new PircBotListener(thisGlobal);
 		man.addListener(theListener);
 		
-		Configuration<PircBotX> config = new Configuration.Builder<PircBotX>()
-			.setName("lunargalbey")
-			.setServerPassword("oauth:sapooyzgzir30i31mzd8u9xdvbgt97")
-			.addAutoJoinChannel(thisGlobal.getChannel())
-			.setServerHostname("irc.twitch.tv")
-			.setServerPort(6667)
-			.setListenerManager(man)
-			.buildConfiguration();
+		ConfigurationLoader confLoad = new ConfigurationLoader();
+		confLoad.LoadConfiguration();
+		Configuration<PircBotX> config = confLoad.GetConfiguration().setListenerManager(man).buildConfiguration();
 		
 		MultiBotManager<PircBotX> manager = new MultiBotManager<PircBotX>();
 		PircBotX theBot = new PircBotX(config);
@@ -55,11 +50,6 @@ public class WordProcessor{
 		{
 			if (theBot.isConnected())
 			{
-				//System.out.println("Here I am with a time check");
-				if (theListener.getLastMessageRespondedTime().plusSeconds(30).isBefore(LocalTime.now()))
-				{
-					man.dispatchEvent(new TimeEvent(theBot, theBot.getUserBot().getChannels().first()));
-				}
 				if (timeCheck.plusSeconds(10).isBefore(LocalTime.now()))
 				{
 					seconds += 10;

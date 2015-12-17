@@ -10,7 +10,6 @@ public class Global {
 	private AtomicInteger dissapointment;
 	private AtomicInteger scared;
 	private int[] feelsCode;
-	private String channel;
 	Random rand;
 	
 	public Global(){
@@ -22,8 +21,6 @@ public class Global {
 		dissapointment = new AtomicInteger(0);
 		scared = new AtomicInteger(0);
 		feelsCode = new int[2];
-		//change me for specific people
-		channel = "#lunargalbey";
 	}
 	
 	//methods
@@ -144,13 +141,6 @@ public class Global {
 		this.feelsCode[1] = (feelCode[1]);
 	}
 
-	public String getChannel() {
-		return channel;
-	}
-
-	public void setChannel(String channel) {
-		this.channel = channel;
-	}
 
 	public String toString(){
 		return "joy:" + joy.get() + " sadness:" + sadness.get() + " anger:" + anger.get() + " humor:" + humor.get() +
