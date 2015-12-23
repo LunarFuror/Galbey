@@ -2,6 +2,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.Vector;
 
 import org.pircbotx.Configuration;
 import org.pircbotx.Configuration.Builder;
@@ -9,7 +10,17 @@ import org.pircbotx.PircBotX;
 
 public class ConfigurationLoader {
 	
-	private boolean loaded = false;
+	private final String NAMEKEY = "name";
+	private final String PASSWORDKEY = "password";
+	private final String CHANNELSKEY = "channels";
+	private final String HOSTNAMEKEY = "hostname";
+	private final String PORTKEY = "port";
+	private final String FEELSDIRECTORYKEY = "feelsdirectory";
+	private final String FEELSFILESKEY = "feelsfiles";	
+	
+	private boolean configLoaded = false;
+	
+	private boolean feelsLoaded = false;
 	
 	private boolean fileOk = false;
 
@@ -21,13 +32,17 @@ public class ConfigurationLoader {
 	
 	private String[] channels;
 	
-	private String hostname;
+	private String hostName;
+	
+	private String feelsDirectory;
+	
+	private String[] feelsFiles;
 	
 	private int port;
 	
 	public ConfigurationLoader()
 	{
-		loaded = false;
+		configLoaded = false;
 		fileOk = false;
 		ResetProperties();
 		SetFilename("galbey.properties");
@@ -35,7 +50,7 @@ public class ConfigurationLoader {
 	
 	public ConfigurationLoader(String fn)
 	{
-		loaded = false;
+		configLoaded = false;
 		fileOk = false;
 		ResetProperties();
 		SetFilename(fileName = fn);
@@ -109,12 +124,12 @@ public class ConfigurationLoader {
 	
 	public void SetHostname(String h)
 	{
-		hostname = h;
+		hostName = h;
 	}
 	
 	public String GetHostname()
 	{
-		return hostname;
+		return hostName;
 	}
 	
 	public void SetPort(int p)
@@ -127,6 +142,40 @@ public class ConfigurationLoader {
 		return port;
 	}
 	
+	public void SetFeelsDirectory(String fd)
+	{
+		feelsDirectory = fd;
+	}
+	
+	public String GetFeelsDirectory()
+	{
+		return feelsDirectory;
+	}
+	
+	public void SetFeelsFiles(String ff)
+	{
+		if (ff != null && !ff.isEmpty())
+		{
+			if (ff.contains(","))
+			{
+				feelsFiles = ff.split(",");
+				for (int i = 0; i < feelsFiles.length; i++)
+				{
+					feelsFiles[i] = feelsFiles[i].trim();
+				}
+			}
+			else
+			{
+				feelsFiles = new String[]{ff};
+			}
+		}
+	}
+	
+	public String[] GetFeelsFiles()
+	{
+		return feelsFiles;
+	}
+	
 	public void LoadConfiguration(String fn) throws IOException
 	{
 		fileName = fn;
@@ -135,7 +184,7 @@ public class ConfigurationLoader {
 	
 	public void LoadConfiguration() throws IOException
 	{
-		loaded = false;
+		configLoaded = false;
 		if (!fileOk)
 		{
 			throw new IOException("Filename is invalid or cannot be opened");
@@ -152,41 +201,71 @@ public class ConfigurationLoader {
 				throw new FileNotFoundException("property file '" + fileName + "' not found in the classpath");
 			}
  
-			if (prop.containsKey("name"))
+			if (prop.containsKey(NAMEKEY))
 			{
-				SetName(prop.getProperty("name"));
+				SetName(prop.getProperty(NAMEKEY));
 			}
-			if (prop.containsKey("password"))
+			if (prop.containsKey(PASSWORDKEY))
 			{
-				SetPassword(prop.getProperty("password"));
+				SetPassword(prop.getProperty(PASSWORDKEY));
 			}
-			if (prop.containsKey("channels"))
+			if (prop.containsKey(CHANNELSKEY))
 			{
-				SetChannels(prop.getProperty("channels"));
+				SetChannels(prop.getProperty(CHANNELSKEY));
 			}
-			if (prop.containsKey("hostname"))
+			if (prop.containsKey(HOSTNAMEKEY))
 			{
-				SetHostname(prop.getProperty("hostname"));
+				SetHostname(prop.getProperty(HOSTNAMEKEY));
 			}
-			if (prop.containsKey("port") && TryParseInt(prop.getProperty("port")))
+			if (prop.containsKey(PORTKEY) && TryParseInt(prop.getProperty(PORTKEY)))
 			{
-				SetPort(Integer.parseInt(prop.getProperty("port")));
+				SetPort(Integer.parseInt(prop.getProperty(PORTKEY)));
+			}
+			if (prop.containsKey(FEELSDIRECTORYKEY))
+			{
+				SetFeelsDirectory(prop.getProperty(FEELSDIRECTORYKEY));
+			}
+			if (prop.containsKey(FEELSFILESKEY))
+			{
+				SetFeelsFiles(prop.getProperty(FEELSFILESKEY));
 			}
 		} catch (Exception e) {
 			System.out.println("Exception: " + e);
 		} finally {
 			inputStream.close();
 		}
-		loaded = true;
+		configLoaded = true;
+	}
+	
+	public Vector<Feels> GetFeels() throws IOException,Exception
+	{
+		if (feelsDirectory != null && feelsFiles != null && feelsFiles.length > 0)
+		{
+			Vector<Feels> returnMe = new Vector<Feels>();
+			
+			for (String fileName : feelsFiles)
+			{
+				try
+				{
+					returnMe.add(new Feels(feelsDirectory + fileName));
+				}
+				catch(IOException ex)
+				{
+					System.out.println(ex.toString());
+				}
+			}
+			return returnMe;
+		}
+		throw new Exception("Feels did not load correclty");
 	}
 	
 	public Configuration.Builder<PircBotX> GetConfiguration() throws Exception
 	{
-		if (!loaded)
+		if (!configLoaded)
 		{
 			LoadConfiguration();
 		}
-		if (loaded)
+		if (configLoaded)
 		{
 			Builder<PircBotX> returnme = new Configuration.Builder<PircBotX>();
 			if (name != null && !name.isEmpty())
@@ -204,9 +283,9 @@ public class ConfigurationLoader {
 					returnme.addAutoJoinChannel(channel);
 				}
 			}
-			if (hostname != null && !hostname.isEmpty())
+			if (hostName != null && !hostName.isEmpty())
 			{
-				returnme.setServerHostname(hostname);
+				returnme.setServerHostname(hostName);
 			}
 			if (port > 0)
 			{
@@ -231,7 +310,9 @@ public class ConfigurationLoader {
 		name = null;
 		password = null;
 		channels = null;
-		hostname = null;
+		hostName = null;
+		feelsFiles = null;
+		feelsDirectory = null;
 		port = 0;
 	}
 }

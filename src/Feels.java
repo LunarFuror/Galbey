@@ -21,7 +21,17 @@ public class Feels
 	
 	public boolean ContainsKeyword(String keyword)
 	{
-		return keywords.contains(keyword.toLowerCase());
+		if (keyword != null && keyword.length() > 0 && keywords != null && keywords.size() > 0)
+		{
+			for (String kw : keywords)
+			{
+				if (keyword.toLowerCase().contains(kw))
+				{
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 	
 	public String GetResponse()
