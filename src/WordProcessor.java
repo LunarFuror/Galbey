@@ -13,14 +13,17 @@ public class WordProcessor{
 
 	@SuppressWarnings("unchecked")
 	public static void main(String[] args) throws IOException, IrcException, InterruptedException, Exception {
-		Global thisGlobal = new Global();
+		
 		final Scanner sc = new Scanner(System.in);
-		ThreadedListenerManager man = new ThreadedListenerManager();
-		PircBotListener theListener = new PircBotListener(thisGlobal);
-		man.addListener(theListener);
 		
 		ConfigurationLoader confLoad = new ConfigurationLoader();
 		confLoad.LoadConfiguration();
+		
+		Global thisGlobal = new Global(confLoad.GetFeels());
+		PircBotListener theListener = new PircBotListener(thisGlobal);
+		ThreadedListenerManager man = new ThreadedListenerManager();
+		man.addListener(theListener);
+		
 		Configuration<PircBotX> config = confLoad.GetConfiguration().setListenerManager(man).buildConfiguration();
 		
 		MultiBotManager<PircBotX> manager = new MultiBotManager<PircBotX>();
